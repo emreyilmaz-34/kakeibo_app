@@ -233,7 +233,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                             delay: Duration(milliseconds: 100 + (index * 30)),
                             child: SimpleCard(
                               padding: EdgeInsets.zero,
-                              onTap: () => context.go('/portfolio/${holding.id}'),
+                              onTap: () => context.push('/portfolio/${holding.id}'),
                               child: ListTile(
                                 contentPadding: const EdgeInsets.symmetric(
                                     horizontal: 16, vertical: 12),

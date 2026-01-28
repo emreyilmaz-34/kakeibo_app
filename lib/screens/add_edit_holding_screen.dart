@@ -84,7 +84,11 @@ class _AddEditHoldingScreenState extends State<AddEditHoldingScreen> {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         );
-        context.pop();
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/portfolio');
+        }
       }
     } finally {
       if (mounted) {
@@ -159,7 +163,7 @@ class _AddEditHoldingScreenState extends State<AddEditHoldingScreen> {
       }
 
       if (mounted) {
-        context.pop();
+        // Show success message first
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
@@ -175,6 +179,13 @@ class _AddEditHoldingScreenState extends State<AddEditHoldingScreen> {
             margin: const EdgeInsets.all(16),
           ),
         );
+        
+        // Navigate back safely
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/portfolio');
+        }
       }
     } catch (e) {
       if (mounted) {
@@ -225,7 +236,11 @@ class _AddEditHoldingScreenState extends State<AddEditHoldingScreen> {
       onPopInvoked: (didPop) {
         if (!didPop) {
           if (context.canPop()) {
-            context.pop();
+            if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/portfolio');
+        }
           } else {
             context.go('/portfolio');
           }
@@ -238,7 +253,11 @@ class _AddEditHoldingScreenState extends State<AddEditHoldingScreen> {
             icon: const Icon(Icons.arrow_back_rounded),
             onPressed: () {
               if (context.canPop()) {
-                context.pop();
+                if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/portfolio');
+        }
               } else {
                 context.go('/portfolio');
               }
@@ -277,7 +296,6 @@ class _AddEditHoldingScreenState extends State<AddEditHoldingScreen> {
                     try {
                       await context.read<HoldingProvider>().deleteHolding(widget.holdingId!);
                       if (mounted) {
-                        context.pop();
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Row(
@@ -293,6 +311,12 @@ class _AddEditHoldingScreenState extends State<AddEditHoldingScreen> {
                             backgroundColor: Colors.red,
                           ),
                         );
+                        // Navigate back safely
+                        if (context.canPop()) {
+                          context.pop();
+                        } else {
+                          context.go('/portfolio');
+                        }
                       }
                     } catch (e) {
                       if (mounted) {

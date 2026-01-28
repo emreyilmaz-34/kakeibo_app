@@ -28,7 +28,10 @@ class _HoldingDetailScreenState extends State<HoldingDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _loadHolding();
+    // Load holding after build completes to avoid setState during build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadHolding();
+    });
   }
 
   Future<void> _loadHolding() async {
@@ -56,7 +59,11 @@ class _HoldingDetailScreenState extends State<HoldingDetailScreen> {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         );
-        context.pop();
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/portfolio');
+        }
       }
     }
   }
@@ -69,7 +76,13 @@ class _HoldingDetailScreenState extends State<HoldingDetailScreen> {
           title: const Text('Holding Details'),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_rounded),
-            onPressed: () => context.pop(),
+            onPressed: () {
+              if (context.canPop()) {
+                context.pop();
+              } else {
+                context.go('/portfolio');
+              }
+            },
           ),
         ),
         body: const Center(child: CircularProgressIndicator()),
@@ -82,7 +95,13 @@ class _HoldingDetailScreenState extends State<HoldingDetailScreen> {
           title: const Text('Holding Details'),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_rounded),
-            onPressed: () => context.pop(),
+            onPressed: () {
+              if (context.canPop()) {
+                context.pop();
+              } else {
+                context.go('/portfolio');
+              }
+            },
           ),
         ),
         body: const Center(child: Text('Holding not found')),
@@ -102,12 +121,18 @@ class _HoldingDetailScreenState extends State<HoldingDetailScreen> {
         title: const Text('Holding Details'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_rounded),
-          onPressed: () => context.pop(),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/portfolio');
+            }
+          },
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit_rounded),
-            onPressed: () => context.go('/portfolio/${_holding!.id}/edit'),
+            onPressed: () => context.push('/portfolio/${_holding!.id}/edit'),
           ),
         ],
       ),
@@ -297,7 +322,7 @@ class _HoldingDetailScreenState extends State<HoldingDetailScreen> {
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
-                  onPressed: () => context.go('/portfolio/${_holding!.id}/edit'),
+                  onPressed: () => context.push('/portfolio/${_holding!.id}/edit'),
                   icon: const Icon(Icons.edit_rounded),
                   label: const Text('Edit Holding'),
                   style: ElevatedButton.styleFrom(

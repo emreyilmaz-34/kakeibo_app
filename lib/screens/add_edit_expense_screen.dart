@@ -83,7 +83,11 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         );
-        context.pop();
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/expenses');
+        }
       }
     } finally {
       if (mounted) {
@@ -161,7 +165,6 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
           await AdInterstitialHelper.onExpenseAdded(
             onAdShown: () {
               if (mounted) {
-                context.pop();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Row(
@@ -177,11 +180,20 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                     margin: const EdgeInsets.all(16),
                   ),
                 );
+                // Navigate back safely
+                if (context.canPop()) {
+                  if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/expenses');
+        }
+                } else {
+                  context.go('/expenses');
+                }
               }
             },
             onAdFailed: () {
               if (mounted) {
-                context.pop();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Row(
@@ -197,26 +209,51 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                     margin: const EdgeInsets.all(16),
                   ),
                 );
+                // Navigate back safely
+                if (context.canPop()) {
+                  if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/expenses');
+        }
+                } else {
+                  context.go('/expenses');
+                }
               }
             },
           );
         } else {
-          context.pop();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Row(
-                children: [
-                  const Icon(Icons.check_circle, color: Colors.white, size: 20),
-                  const SizedBox(width: 12),
-                  Text(_expense != null ? 'Expense updated!' : 'Expense added!'),
-                ],
+          // Show success message first
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Row(
+                  children: [
+                    const Icon(Icons.check_circle, color: Colors.white, size: 20),
+                    const SizedBox(width: 12),
+                    Text(_expense != null ? 'Expense updated!' : 'Expense added!'),
+                  ],
+                ),
+                behavior: SnackBarBehavior.floating,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                backgroundColor: AppTheme.successColor,
+                margin: const EdgeInsets.all(16),
               ),
-              behavior: SnackBarBehavior.floating,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              backgroundColor: AppTheme.successColor,
-              margin: const EdgeInsets.all(16),
-            ),
-          );
+            );
+          }
+          
+          // Navigate back safely
+          if (mounted) {
+            if (context.canPop()) {
+              if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/expenses');
+        }
+            } else {
+              context.go('/expenses');
+            }
+          }
         }
       }
     } catch (e) {
@@ -256,7 +293,11 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
             icon: const Icon(Icons.arrow_back_rounded),
             onPressed: () {
               if (context.canPop()) {
-                context.pop();
+                if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/expenses');
+        }
               } else {
                 context.go('/expenses');
               }
@@ -272,7 +313,11 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
       onPopInvoked: (didPop) {
         if (!didPop) {
           if (context.canPop()) {
-            context.pop();
+            if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/expenses');
+        }
           } else {
             // Eğer pop yapılamıyorsa, expenses listesine dön
             context.go('/expenses');
@@ -286,7 +331,11 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
             icon: const Icon(Icons.arrow_back_rounded),
             onPressed: () {
               if (context.canPop()) {
-                context.pop();
+                if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/expenses');
+        }
               } else {
                 // Eğer pop yapılamıyorsa, expenses listesine dön
                 context.go('/expenses');
@@ -327,7 +376,11 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                   try {
                     await context.read<ExpenseProvider>().deleteExpense(widget.expenseId!);
                     if (mounted) {
-                      context.pop();
+                      if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/expenses');
+        }
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Row(

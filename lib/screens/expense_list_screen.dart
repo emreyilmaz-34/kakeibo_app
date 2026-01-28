@@ -351,7 +351,7 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
                               delay: Duration(milliseconds: 50 + (index * 20)),
                               child: SimpleCard(
                                 padding: EdgeInsets.zero,
-                                onTap: () => context.go('/expenses/${expense.id}'),
+                                onTap: () => context.push('/expenses/${expense.id}'),
                                 child: ListTile(
                                   contentPadding: const EdgeInsets.symmetric(
                                       horizontal: 16, vertical: 12),

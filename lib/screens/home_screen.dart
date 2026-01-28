@@ -287,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     delay: Duration(milliseconds: 200 + (index * 30)),
                     child: SimpleCard(
                       padding: EdgeInsets.zero,
-                      onTap: () => context.go('/expenses/${expense.id}'),
+                      onTap: () => context.push('/expenses/${expense.id}'),
                       child: ListTile(
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         leading: Container(

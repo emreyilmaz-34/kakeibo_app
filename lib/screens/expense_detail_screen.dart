@@ -31,7 +31,10 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _loadExpense();
+    // Load expense after build completes to avoid setState during build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadExpense();
+    });
   }
 
   Future<void> _loadExpense() async {
@@ -61,7 +64,11 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           ),
         );
-        context.pop();
+        if (context.canPop()) {
+          context.pop();
+        } else {
+          context.go('/expenses');
+        }
       }
     }
   }
@@ -120,10 +127,8 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
       return Scaffold(
         appBar: AppBar(
           title: const Text('Expense Details'),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_rounded),
-            onPressed: () => context.pop(),
-          ),
+          leading: null,
+          automaticallyImplyLeading: true,
         ),
         body: const Center(child: CircularProgressIndicator()),
       );
@@ -133,10 +138,8 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
       return Scaffold(
         appBar: AppBar(
           title: const Text('Expense Details'),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_rounded),
-            onPressed: () => context.pop(),
-          ),
+          leading: null,
+          automaticallyImplyLeading: true,
         ),
         body: const Center(child: Text('Expense not found')),
       );
@@ -145,14 +148,18 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Expense Details'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded),
-          onPressed: () => context.pop(),
-        ),
+        leading: context.canPop()
+            ? null // Let AppBar handle back button automatically when there's a route to pop
+            : IconButton(
+                icon: const Icon(Icons.home_rounded),
+                onPressed: () => context.go('/'),
+                tooltip: 'Home',
+              ),
+        automaticallyImplyLeading: context.canPop(),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit_rounded),
-            onPressed: () => context.go('/expenses/${_expense!.id}/edit'),
+            onPressed: () => context.push('/expenses/${_expense!.id}/edit'),
           ),
         ],
       ),
@@ -330,7 +337,7 @@ class _ExpenseDetailScreenState extends State<ExpenseDetailScreen> {
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
-                  onPressed: () => context.go('/expenses/${_expense!.id}/edit'),
+                  onPressed: () => context.push('/expenses/${_expense!.id}/edit'),
                   icon: const Icon(Icons.edit_rounded),
                   label: const Text('Edit Expense'),
                   style: ElevatedButton.styleFrom(
